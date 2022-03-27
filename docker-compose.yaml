@@ -1,0 +1,36 @@
+version: '3.9'
+
+services:
+  backend:
+    container_name: "backend"
+    #    image: "docker.io/jboss/wildfly-admin"
+    build: ./backend
+    environment:
+      - WILDFLY_USER=admin
+      - WILDFLY_PASS=adminPassword
+      - DB_NAME=sample
+      - DB_USER=mysql
+      - DB_PASS=mysql
+      - DB_URI=db:3306
+    depends_on:
+      - database
+    ports:
+      - "8080:8080" # application
+      - "9990:9990" # admin console
+    links:
+      - database
+  database:
+    container_name: "db"
+    image: "mysql:latest"
+    environment:
+      - MYSQL_DATABASE=sample
+      - MYSQL_USER=mysql
+      - MYSQL_PASSWORD=mysql
+      - MYSQL_ROOT_PASSWORD=supersecret
+    cap_add:
+      - SYS_NICE  # CAP_SYS_NICE
+    volumes:
+      - ./workdir/db/init/:/docker-entrypoint-initdb.d/ # init database
+      - ./workdir/db/data/:/var/lib/mysql/              # data storage
+    ports:
+      - "3306:3306"
