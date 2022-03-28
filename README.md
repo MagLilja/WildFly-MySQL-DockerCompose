@@ -23,8 +23,7 @@ Enter the running server through Docker Bash
 $ docker exec -it <Wildfly container id> bash
 ```
 
-then navigate to jboss-cli.sh
-
+then navigate to bin-folder
 ```
 $ cd /opt/jboss/wildfly/bin/
 ```
